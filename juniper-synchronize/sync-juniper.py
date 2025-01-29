@@ -5,28 +5,28 @@ import subprocess
 # Konfigurasi perangkat Juniper
 MASTER = {
     "host": "192.168.100.21",
-    "username": "me",
+    "username": "user",
     "password": "password123"
 }
 BACKUP = {
     "host": "192.168.100.22",
-    "username": "me",
+    "username": "user",
     "password": "password123"
 }
 
 # Konfigurasi yang wajib ada
 MANDATORY_CONFIG = """
 system {
-    host-name MX204-2;
+    host-name RO-BACKUP;
     root-authentication {
-        encrypted-password "$1$Hhbkg0V.$QBH5nLTGhF.swn9nS9OTR/"; ## SECRET-DATA
+        encrypted-password "$adwadwawdsdahkiuwal; ## SECRET-DATA
     }
     login {
-        user me {
+        user admin {
             uid 2000;
             class super-user;
             authentication {
-                encrypted-password "$1$yoe7KOB1$liFiRBLfTt75Ojv.vNQGV0"; ## SECRET-DATA
+                encrypted-password "$1$ydwaf/afawra0"; ## SECRET-DATA
             }
         }
     }
