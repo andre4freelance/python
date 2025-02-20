@@ -2,28 +2,33 @@ import paramiko
 from datetime import datetime
 from ftplib import FTP
 import subprocess
+import os
 
 # Konfigurasi perangkat Juniper
 DEVICE = {
-    "host": "10.10.10.1",
+    "host": "10.10.19.1",
     "username": "admin",
     "password": "password123",
-    "port": 9922
+    "port": 22
 }
 
 # Konfigurasi FTP
 FTP_SERVER = {
-    "host": "10.10.10.4",
+    "host": "10.10.20.1",
     "username": "admin",
     "password": "password123",
     "remote_dir": ""
 }
 
+# Path absolut dari direktori skrip
+script_dir = os.path.dirname(os.path.abspath(__file__))
+notif_script = os.path.join(script_dir, "notif.py")
+
 def ssh_command(device, command):
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-        client.connect(device["host"], port=device["port"], username=device["username"], password=device["password"], timeout=180, banner_timeout=180)
+        client.connect(device["host"], port=device["port"], username=device["username"], password=device["password"], timeout=300, banner_timeout=300, auth_timeout=300)
         stdin, stdout, stderr = client.exec_command(command)
         output = stdout.read().decode("utf-8")
         client.close()
@@ -41,7 +46,7 @@ def upload_to_ftp(filename):
                 ftp.storbinary(f'STOR {filename}', file)
         print(f"✅ Berhasil mengunggah {filename} ke FTP server")
         # Eksekusi script notifikasi jika upload berhasil
-        subprocess.run(["python3", "notif.py"], check=True)
+        subprocess.run(["/usr/bin/python3", notif_script], check=True)
     except Exception as e:
         print(f"❌ ERROR: Gagal mengunggah file ke FTP: {e}")
 
